@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Ol - E-Ticaret</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body class="animated-bg">
+    <div class="container-fluid h-100">
+        <div class="row justify-content-center align-items-center min-vh-100">
+            <div class="col-md-7 col-lg-6 col-xl-5">
+                <div class="modern-card slide-in">
+                    <div class="card-header bg-transparent border-0 text-center py-4">
+                        <div class="icon-large mb-3">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <h3 class="fw-bold text-dark">Kayıt Ol</h3>
+                        <p class="text-muted">Hemen ücretsiz hesap oluşturun</p>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Error Message -->
+                        <div th:if="${error}" class="alert alert-danger border-0 rounded-3 fade-in" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <span th:text="${error}"></span>
+                        </div>
+
+                        <form method="post" action="/register" th:object="${user}">
+                            <div class="row">
+                                <div class="col-12 mb-4">
+                                    <label for="username" class="form-label fw-semibold">
+                                        <i class="fas fa-user me-2 text-muted"></i>Kullanıcı Adı
+                                    </label>
+                                    <input type="text" class="form-control form-control-modern" id="username" 
+                                           th:field="*{username}" placeholder="Kullanıcı adınız" required>
+                                </div>
+                                
+                                <div class="col-12 mb-4">
+                                    <label for="email" class="form-label fw-semibold">
+                                        <i class="fas fa-envelope me-2 text-muted"></i>Email Adresi
+                                    </label>
+                                    <input type="email" class="form-control form-control-modern" id="email" 
+                                           th:field="*{email}" placeholder="email@example.com" required>
+                                </div>
+                                
+                                <div class="col-12 mb-4">
+                                    <label for="password" class="form-label fw-semibold">
+                                        <i class="fas fa-key me-2 text-muted"></i>Şifre
+                                    </label>
+                                    <input type="password" class="form-control form-control-modern" id="password" 
+                                           th:field="*{password}" placeholder="••••••••" required minlength="6">
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>En az 6 karakter olmalıdır
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid mb-4">
+                                <button type="submit" class="btn btn-gradient btn-modern btn-lg">
+                                    <i class="fas fa-user-plus me-2"></i>Hesap Oluştur
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="text-center">
+                            <p class="mb-3">Zaten hesabınız var mı? 
+                                <a href="/login" class="text-decoration-none fw-semibold">
+                                    <i class="fas fa-sign-in-alt me-1"></i>Giriş yapın
+                                </a>
+                            </p>
+                            <a href="/" class="btn btn-outline-secondary btn-sm rounded-pill">
+                                <i class="fas fa-arrow-left me-2"></i>Ana Sayfaya Dön
+                            </a>
+                        </div>
+                        
+                        <div class="mt-4 p-3 bg-light rounded-3">
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <i class="fas fa-shield-alt text-success mb-2 d-block"></i>
+                                    <small class="text-muted">Güvenli</small>
+                                </div>
+                                <div class="col-4">
+                                    <i class="fas fa-bolt text-warning mb-2 d-block"></i>
+                                    <small class="text-muted">Hızlı</small>
+                                </div>
+                                <div class="col-4">
+                                    <i class="fas fa-gift text-primary mb-2 d-block"></i>
+                                    <small class="text-muted">Ücretsiz</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
