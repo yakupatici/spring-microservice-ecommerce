@@ -35,14 +35,14 @@ public class WebController {
     @PostMapping("/register")
     public String registerUser(@ModelAttribute User user, RedirectAttributes redirectAttributes) {
         if (userRepository.existsByEmail(user.getEmail())) {
-            redirectAttributes.addFlashAttribute("error", "Email zaten kayıtlı!");
+            redirectAttributes.addFlashAttribute("error", "Email is already registered!");
             return "redirect:/register";
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         
-        redirectAttributes.addFlashAttribute("success", "Kayıt başarılı! Giriş yapabilirsiniz.");
+        redirectAttributes.addFlashAttribute("success", "Registration successful! You can now sign in.");
         return "redirect:/login";
     }
 
@@ -52,17 +52,17 @@ public class WebController {
                            RedirectAttributes redirectAttributes) {
         try {
             User user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı"));
+                    .orElseThrow(() -> new RuntimeException("User not found"));
 
             if (passwordEncoder.matches(password, user.getPassword())) {
-                redirectAttributes.addFlashAttribute("success", "Giriş başarılı!");
+                redirectAttributes.addFlashAttribute("success", "Login successful!");
                 return "redirect:/dashboard";
             } else {
-                redirectAttributes.addFlashAttribute("error", "Hatalı şifre!");
+                redirectAttributes.addFlashAttribute("error", "Invalid password!");
                 return "redirect:/login";
             }
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Kullanıcı bulunamadı!");
+            redirectAttributes.addFlashAttribute("error", "User not found!");
             return "redirect:/login";
         }
     }

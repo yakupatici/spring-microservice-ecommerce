@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kayıt Ol - E-Ticaret</title>
+    <title>Sign Up - E-Commerce</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -18,8 +18,8 @@
                         <div class="icon-large mb-3">
                             <i class="fas fa-user-plus"></i>
                         </div>
-                        <h3 class="fw-bold text-dark">Kayıt Ol</h3>
-                        <p class="text-muted">Hemen ücretsiz hesap oluşturun</p>
+                        <h3 class="fw-bold text-dark">Sign Up</h3>
+                        <p class="text-muted">Create your free account now</p>
                     </div>
                     <div class="card-body p-4">
                         <!-- Error Message -->
@@ -32,15 +32,15 @@
                             <div class="row">
                                 <div class="col-12 mb-4">
                                     <label for="username" class="form-label fw-semibold">
-                                        <i class="fas fa-user me-2 text-muted"></i>Kullanıcı Adı
+                                        <i class="fas fa-user me-2 text-muted"></i>Username
                                     </label>
                                     <input type="text" class="form-control form-control-modern" id="username" 
-                                           th:field="*{username}" placeholder="Kullanıcı adınız" required>
+                                           th:field="*{username}" placeholder="Your username" required>
                                 </div>
                                 
                                 <div class="col-12 mb-4">
                                     <label for="email" class="form-label fw-semibold">
-                                        <i class="fas fa-envelope me-2 text-muted"></i>Email Adresi
+                                        <i class="fas fa-envelope me-2 text-muted"></i>Email Address
                                     </label>
                                     <input type="email" class="form-control form-control-modern" id="email" 
                                            th:field="*{email}" placeholder="email@example.com" required>
@@ -48,19 +48,19 @@
                                 
                                 <div class="col-12 mb-4">
                                     <label for="password" class="form-label fw-semibold">
-                                        <i class="fas fa-key me-2 text-muted"></i>Şifre
+                                        <i class="fas fa-key me-2 text-muted"></i>Password
                                     </label>
                                     <input type="password" class="form-control form-control-modern" id="password" 
                                            th:field="*{password}" placeholder="••••••••" required minlength="6">
                                     <div class="form-text">
-                                        <i class="fas fa-info-circle me-1"></i>En az 6 karakter olmalıdır
+                                        <i class="fas fa-info-circle me-1"></i>Must be at least 6 characters
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="d-grid mb-4">
                                 <button type="submit" class="btn btn-gradient btn-modern btn-lg">
-                                    <i class="fas fa-user-plus me-2"></i>Hesap Oluştur
+                                    <i class="fas fa-user-plus me-2"></i>Create Account
                                 </button>
                             </div>
                         </form>
@@ -68,13 +68,13 @@
                         <hr class="my-4">
                         
                         <div class="text-center">
-                            <p class="mb-3">Zaten hesabınız var mı? 
+                            <p class="mb-3">Already have an account? 
                                 <a href="/login" class="text-decoration-none fw-semibold">
-                                    <i class="fas fa-sign-in-alt me-1"></i>Giriş yapın
+                                    <i class="fas fa-sign-in-alt me-1"></i>Sign in
                                 </a>
                             </p>
                             <a href="/" class="btn btn-outline-secondary btn-sm rounded-pill">
-                                <i class="fas fa-arrow-left me-2"></i>Ana Sayfaya Dön
+                                <i class="fas fa-arrow-left me-2"></i>Back to Home
                             </a>
                         </div>
                         
@@ -82,15 +82,15 @@
                             <div class="row text-center">
                                 <div class="col-4">
                                     <i class="fas fa-shield-alt text-success mb-2 d-block"></i>
-                                    <small class="text-muted">Güvenli</small>
+                                    <small class="text-muted">Secure</small>
                                 </div>
                                 <div class="col-4">
                                     <i class="fas fa-bolt text-warning mb-2 d-block"></i>
-                                    <small class="text-muted">Hızlı</small>
+                                    <small class="text-muted">Fast</small>
                                 </div>
                                 <div class="col-4">
                                     <i class="fas fa-gift text-primary mb-2 d-block"></i>
-                                    <small class="text-muted">Ücretsiz</small>
+                                    <small class="text-muted">Free</small>
                                 </div>
                             </div>
                         </div>
