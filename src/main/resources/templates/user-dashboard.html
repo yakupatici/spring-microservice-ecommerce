@@ -92,7 +92,7 @@
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1">
                                 <h6 class="text-white-50 mb-1">Total Products</h6>
-                                <h3 class="mb-0">127</h3>
+                                <h3 class="mb-0" th:text="${#lists.size(products)}">0</h3>
                             </div>
                             <div class="ms-3">
                                 <i class="fas fa-box fa-2x opacity-75"></i>
@@ -107,10 +107,168 @@
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1">
                                 <h6 class="text-white-50 mb-1">Items in Cart</h6>
-                                <h3 class="mb-0">3</h3>
+                                <h3 class="mb-0">0</h3>
                             </div>
                             <div class="ms-3">
                                 <i class="fas fa-shopping-cart fa-2x opacity-75"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Section -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-shopping-bag me-2"></i>Available Products
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${#lists.isEmpty(products)}">
+                            <div class="text-center py-5">
+                                <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                                <h5 class="text-muted">No Products Available</h5>
+                                <p class="text-muted">Check back later for new products!</p>
+                            </div>
+                        </div>
+                        <div th:unless="${#lists.isEmpty(products)}">
+                            <div class="row g-4">
+                                <div class="col-md-6 col-lg-4" th:each="product : ${products}">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div th:if="${product.imageUrl}" class="position-relative">
+                                            <img th:src="${product.imageUrl}" class="card-img-top" alt="Product Image" style="height: 200px; object-fit: cover;">
+                                        </div>
+                                        <div th:unless="${product.imageUrl}" class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                            <i class="fas fa-image fa-3x text-muted"></i>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-start justify-content-between mb-3">
+                                                <h6 class="card-title mb-0 text-primary" th:text="${product.name}">Product Name</h6>
+                                                <span class="badge bg-success fs-6" th:text="'$' + ${product.price}">$0.00</span>
+                                            </div>
+                                            <p class="card-text text-muted small" th:text="${product.description}">Product description...</p>
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-cubes me-1"></i>
+                                                    Stock: <span th:text="${product.stockQuantity}">0</span>
+                                                </small>
+                                                <div class="btn-group" role="group">
+                                                    <button type="button" class="btn btn-outline-primary btn-sm">
+                                                        <i class="fas fa-heart"></i>
+                                                    </button>
+                                                    <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post" style="display: inline;">
+                                                        <input type="hidden" name="quantity" value="1">
+                                                        <button type="submit" class="btn btn-primary btn-sm" 
+                                                                th:disabled="${product.stockQuantity == 0}">
+                                                            <i class="fas fa-shopping-cart me-1"></i>Add to Cart
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success/Error Messages -->
+        <div class="row mb-4" th:if="${success != null || error != null}">
+            <div class="col-12">
+                <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <span th:text="${success}">Success message</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <span th:text="${error}">Error message</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cart Items Section -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-shopping-cart me-2"></i>Shopping Cart
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${#lists.isEmpty(cartItems)}">
+                            <div class="text-center py-5">
+                                <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                                <h5 class="text-muted">Your cart is empty</h5>
+                                <p class="text-muted">Add some products to your cart!</p>
+                            </div>
+                        </div>
+                        <div th:unless="${#lists.isEmpty(cartItems)}">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>Total</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="item : ${cartItems}">
+                                            <td th:text="${item.product.name}">Product Name</td>
+                                            <td th:text="'$' + ${item.product.price}">$0.00</td>
+                                            <td>
+                                                <form th:action="@{/cart/update/{id}(id=${item.product.id})}" 
+                                                      method="post" class="d-flex align-items-center">
+                                                    <input type="number" name="quantity" 
+                                                           th:value="${item.quantity}" 
+                                                           min="1" 
+                                                           th:max="${item.product.stockQuantity}"
+                                                           class="form-control form-control-sm" 
+                                                           style="width: 70px;">
+                                                    <button type="submit" class="btn btn-sm btn-outline-primary ms-2">
+                                                        <i class="fas fa-sync-alt"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                            <td th:text="'$' + ${item.quantity * item.product.price}">$0.00</td>
+                                            <td>
+                                                <form th:action="@{/cart/remove/{id}(id=${item.product.id})}" 
+                                                      method="post" style="display: inline;">
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                                            <td colspan="2">
+                                                <strong th:text="'$' + ${#aggregates.sum(cartItems.![quantity * product.price])}">
+                                                    $0.00
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div class="text-end mt-3">
+                                <button class="btn btn-success">
+                                    <i class="fas fa-shopping-cart me-2"></i>Proceed to Checkout
+                                </button>
                             </div>
                         </div>
                     </div>

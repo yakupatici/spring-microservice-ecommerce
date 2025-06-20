@@ -23,6 +23,7 @@ public class SecurityConfig {
                                 .requestMatchers("/").permitAll()
                                 .requestMatchers("/index").permitAll()
                                 .requestMatchers("/css/**", "/js/**").permitAll()
+                                .requestMatchers("/h2-console/**").permitAll()  // H2 Console access
                                 .requestMatchers("/admin/**").hasAuthority("ADMIN")
                                 .anyRequest().authenticated()
                 ).formLogin(
@@ -36,7 +37,8 @@ public class SecurityConfig {
                         logout -> logout
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                                 .permitAll()
-                );
+                )
+                .headers(headers -> headers.frameOptions().disable()); // H2 Console frames
         return http.build();
     }
 
