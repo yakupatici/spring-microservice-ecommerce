@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - E-Commerce</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-shopping-cart me-2"></i>E-Commerce
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link text-white" href="/logout">
+                    <i class="fas fa-sign-out-alt me-1"></i>Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <!-- Welcome Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex align-items-center justify-content-between bg-white p-4 rounded shadow-sm">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-user-circle me-3"></i>User Dashboard
+                    </div>
+                    <div class="text-muted">
+                        <i class="fas fa-clock me-1"></i>
+                        <span id="currentTime"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Features Grid -->
+        <div class="row g-4 mb-5">
+            <!-- Browse Products -->
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-shopping-bag fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Browse Products</h5>
+                        <p class="card-text">You can view and explore all products in our store.</p>
+                        <a href="#" class="btn btn-primary">
+                            <i class="fas fa-eye me-1"></i>View Products
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Favorites -->
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-heart fa-3x text-danger mb-3"></i>
+                        <h5 class="card-title">My Favorites</h5>
+                        <p class="card-text">You can add your favorite products to favorites and review them later.</p>
+                        <a href="#" class="btn btn-danger">
+                            <i class="fas fa-heart me-1"></i>My Favorites
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shopping Cart -->
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-shopping-cart fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">Shopping Cart</h5>
+                        <p class="card-text">You can view the products in your cart and complete the purchase.</p>
+                        <a href="#" class="btn btn-success">
+                            <i class="fas fa-shopping-cart me-1"></i>My Cart
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-6">
+                <div class="card bg-gradient text-white" style="background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1">
+                                <h6 class="text-white-50 mb-1">Total Products</h6>
+                                <h3 class="mb-0">127</h3>
+                            </div>
+                            <div class="ms-3">
+                                <i class="fas fa-box fa-2x opacity-75"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card bg-gradient text-white" style="background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1">
+                                <h6 class="text-white-50 mb-1">Items in Cart</h6>
+                                <h3 class="mb-0">3</h3>
+                            </div>
+                            <div class="ms-3">
+                                <i class="fas fa-shopping-cart fa-2x opacity-75"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Info Alert -->
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-info" role="alert">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Information:</strong> This user dashboard is specially designed for you.
+                    You do not have admin privileges. For product management and other admin functions,
+                    you need to log in with an admin account.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <div class="container">
+            <p class="mb-0">&copy; 2025 E-Commerce Platform. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Update current time
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString();
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+    </script>
+</body>
+</html> 

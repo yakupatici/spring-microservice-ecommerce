@@ -1,41 +1,50 @@
 package com.code.springboot.springmicroserviceecommerce.controller;
 
+import com.code.springboot.springmicroserviceecommerce.dto.UserDto;
 import com.code.springboot.springmicroserviceecommerce.model.User;
-import com.code.springboot.springmicroserviceecommerce.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import com.code.springboot.springmicroserviceecommerce.service.UserService;
+import jakarta.validation.Valid;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
-@RestController
-@RequestMapping("/api/auth")
-@RequiredArgsConstructor
+@Controller
 public class AuthController {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
-            return ResponseEntity.badRequest().body("Email is already taken!");
-        }
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User savedUser = userRepository.save(user);
-        
-        return ResponseEntity.ok("User registered successfully!");
+    public AuthController(UserService userService) {
+        this.userService = userService;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody User loginRequest) {
-        User user = userRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    @GetMapping("/login")
+    public String loginForm() {
+        return "login";
+    }
 
-        if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            return ResponseEntity.ok("Login successful!");
+    @GetMapping("/register")
+    public String showRegistrationForm(Model model) {
+        UserDto user = new UserDto();
+        model.addAttribute("user", user);
+        return "register";
+    }
+
+    @PostMapping("/register")
+    public String registration(@Valid @ModelAttribute("user") UserDto user,
+                             BindingResult result,
+                             Model model) {
+        User existing = userService.findByEmail(user.getEmail());
+        if (existing != null) {
+            result.rejectValue("email", null, "There is already an account registered with that email");
         }
-
-        return ResponseEntity.badRequest().body("Invalid password!");
+        if (result.hasErrors()) {
+            model.addAttribute("user", user);
+            return "register";
+        }
+        userService.saveUser(user);
+        return "redirect:/login?success";
     }
 } 

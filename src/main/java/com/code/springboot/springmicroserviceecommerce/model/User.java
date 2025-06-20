@@ -4,30 +4,45 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+import java.util.ArrayList;
+import java.util.List;
+
+// Model class to store user information in database
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
     
+    private static final long serialVersionUID = 1L;
+
+    // Unique user identifier
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    private String username;
+    // Username - cannot be blank
+    @Column(nullable = false)
+    private String name;
 
-    @NotBlank
-    @Email
-    @Column(unique = true)
+    // Email address - cannot be blank and must be unique
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @NotBlank
+    // Password - cannot be blank
+    @Column(nullable = false)
     private String password;
 
-    private String role = "USER";
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
+            inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")})
+    private List<Role> roles = new ArrayList<>();
 } 

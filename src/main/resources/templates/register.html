@@ -30,14 +30,21 @@
 
                         <form method="post" action="/register" th:object="${user}">
                             <div class="row">
-                                <div class="col-12 mb-4">
-                                    <label for="username" class="form-label fw-semibold">
-                                        <i class="fas fa-user me-2 text-muted"></i>Username
+                                <div class="col-md-6 mb-4">
+                                    <label for="firstName" class="form-label fw-semibold">
+                                        <i class="fas fa-user me-2 text-muted"></i>First Name
                                     </label>
-                                    <input type="text" class="form-control form-control-modern" id="username" 
-                                           th:field="*{username}" placeholder="Your username" required>
+                                    <input type="text" class="form-control form-control-modern" id="firstName"
+                                           th:field="*{firstName}" placeholder="Your first name" required>
                                 </div>
-                                
+                                <div class="col-md-6 mb-4">
+                                    <label for="lastName" class="form-label fw-semibold">
+                                        <i class="fas fa-user me-2 text-muted"></i>Last Name
+                                    </label>
+                                    <input type="text" class="form-control form-control-modern" id="lastName"
+                                           th:field="*{lastName}" placeholder="Your last name" required>
+                                </div>
+
                                 <div class="col-12 mb-4">
                                     <label for="email" class="form-label fw-semibold">
                                         <i class="fas fa-envelope me-2 text-muted"></i>Email Address
