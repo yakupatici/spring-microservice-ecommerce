@@ -50,7 +50,8 @@ public class SpringMicroserviceEcommerceApplication implements CommandLineRunner
         // Create admin user if not exist
         if (userRepository.findByEmail("admin@example.com").isEmpty()) {
             User admin = new User();
-            admin.setName("Admin User");
+            admin.setFirstName("Admin");
+            admin.setLastName("User");
             admin.setEmail("admin@example.com");
             admin.setPassword(passwordEncoder.encode("admin"));
             admin.setRoles(Arrays.asList(adminRole));

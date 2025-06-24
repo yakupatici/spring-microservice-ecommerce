@@ -10,4 +10,5 @@ public interface CartService {
     List<CartItem> getCartItems(User user);
     void removeFromCart(User user, Long productId);
     void updateCartItemQuantity(User user, Long productId, Integer quantity);
+    int getCartItemCount(User user);
 } 

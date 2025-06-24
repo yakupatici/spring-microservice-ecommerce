@@ -19,11 +19,13 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers("/register/**").permitAll()
+                        authorize
+                                .requestMatchers("/register/**", "/login/**").permitAll()
                                 .requestMatchers("/").permitAll()
                                 .requestMatchers("/index").permitAll()
-                                .requestMatchers("/css/**", "/js/**").permitAll()
-                                .requestMatchers("/h2-console/**").permitAll()  // H2 Console access
+                                .requestMatchers("/products/**").permitAll()
+                                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                                .requestMatchers("/h2-console/**").permitAll()
                                 .requestMatchers("/admin/**").hasAuthority("ADMIN")
                                 .anyRequest().authenticated()
                 ).formLogin(
@@ -31,14 +33,18 @@ public class SecurityConfig {
                                 .loginPage("/login")
                                 .loginProcessingUrl("/login")
                                 .usernameParameter("email")
-                                .defaultSuccessUrl("/dashboard")
+                                .defaultSuccessUrl("/dashboard", true)
                                 .permitAll()
                 ).logout(
                         logout -> logout
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                                .logoutSuccessUrl("/login?logout")
+                                .invalidateHttpSession(true)
+                                .clearAuthentication(true)
                                 .permitAll()
                 )
-                .headers(headers -> headers.frameOptions().disable()); // H2 Console frames
+                .headers(headers -> headers.frameOptions().disable());
+        
         return http.build();
     }
 

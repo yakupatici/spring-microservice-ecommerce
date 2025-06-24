@@ -13,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 // Controller to manage web pages and form operations
 @Controller
 @RequiredArgsConstructor
@@ -25,24 +27,59 @@ public class WebController {
 
     // Display home page
     @GetMapping("/")
-    public String home() {
+    public String home(Model model) {
+        model.addAttribute("products", productService.findAllProducts());
         return "index";
     }
 
     // Display dashboard page based on user role
     @GetMapping("/dashboard")
     public String dashboard(Authentication authentication, Model model) {
-        // Check if user has ADMIN role
         if (authentication != null && 
             authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
-            return "dashboard"; // Admin dashboard
+            return "redirect:/admin/products";
         } else {
             User user = userRepository.findByEmail(authentication.getName())
                     .orElseThrow(() -> new RuntimeException("User not found"));
-            model.addAttribute("products", productService.findAllProducts());
-            model.addAttribute("cartItems", cartService.getCartItems(user));
-            return "user-dashboard"; // Regular user dashboard
+            
+            // Add user information
+            model.addAttribute("user", user);
+            
+            // Add cart count
+            model.addAttribute("cartCount", cartService.getCartItemCount(user));
+            
+            // Add favorites count (placeholder until implemented)
+            model.addAttribute("favoritesCount", 0);
+            model.addAttribute("favoriteCount", 0);
+            
+            // Add total orders (placeholder)
+            model.addAttribute("totalOrders", 0);
+            
+            // Add total spent (placeholder)
+            model.addAttribute("totalSpent", 0.0);
+            
+            // Add recent orders (placeholder)
+            model.addAttribute("recentOrders", List.of());
+            
+            // Add recent favorites (placeholder)
+            model.addAttribute("recentFavorites", List.of());
+            
+            return "user-dashboard";
         }
+    }
+
+    @GetMapping("/cart")
+    public String viewCart(Authentication authentication, Model model) {
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        model.addAttribute("cartItems", cartService.getCartItems(user));
+        return "cart";
+    }
+
+    @GetMapping("/favorites")
+    public String viewFavorites(Authentication authentication, Model model) {
+        // TODO: Implement favorites functionality
+        return "favorites";
     }
 
     @PostMapping("/cart/add/{productId}")
@@ -54,7 +91,7 @@ public class WebController {
             User user = userRepository.findByEmail(authentication.getName())
                     .orElseThrow(() -> new RuntimeException("User not found"));
             cartService.addToCart(user, productId, quantity);
-            redirectAttributes.addFlashAttribute("success", "Product added to cart successfully!");
+            redirectAttributes.addFlashAttribute("success", "Ürün sepete eklendi!");
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
@@ -69,11 +106,11 @@ public class WebController {
             User user = userRepository.findByEmail(authentication.getName())
                     .orElseThrow(() -> new RuntimeException("User not found"));
             cartService.removeFromCart(user, productId);
-            redirectAttributes.addFlashAttribute("success", "Product removed from cart!");
+            redirectAttributes.addFlashAttribute("success", "Ürün sepetten kaldırıldı!");
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
-        return "redirect:/dashboard";
+        return "redirect:/cart";
     }
 
     @PostMapping("/cart/update/{productId}")
@@ -85,10 +122,16 @@ public class WebController {
             User user = userRepository.findByEmail(authentication.getName())
                     .orElseThrow(() -> new RuntimeException("User not found"));
             cartService.updateCartItemQuantity(user, productId, quantity);
-            redirectAttributes.addFlashAttribute("success", "Cart updated successfully!");
+            redirectAttributes.addFlashAttribute("success", "Sepet güncellendi!");
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
-        return "redirect:/dashboard";
+        return "redirect:/cart";
+    }
+
+    @GetMapping("/products")
+    public String listProducts(Model model) {
+        model.addAttribute("products", productService.findAllProducts());
+        return "products";
     }
 } 

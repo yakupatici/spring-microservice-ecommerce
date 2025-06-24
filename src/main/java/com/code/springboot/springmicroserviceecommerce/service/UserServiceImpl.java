@@ -29,7 +29,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveUser(UserDto userDto) {
         User user = new User();
-        user.setName(userDto.getFirstName() + " " + userDto.getLastName());
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
@@ -66,7 +67,8 @@ public class UserServiceImpl implements UserService {
 
         if (userRepository.findByEmail("admin@example.com").isEmpty()) {
             User admin = new User();
-            admin.setName("Admin");
+            admin.setFirstName("Admin");
+            admin.setLastName("User");
             admin.setEmail("admin@example.com");
             admin.setPassword(passwordEncoder.encode("admin"));
             admin.setRoles(Arrays.asList(adminRole));

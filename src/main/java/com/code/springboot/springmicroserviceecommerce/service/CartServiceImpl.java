@@ -65,4 +65,10 @@ public class CartServiceImpl implements CartService {
         cartItem.setQuantity(quantity);
         cartItemRepository.save(cartItem);
     }
+
+    @Override
+    public int getCartItemCount(User user) {
+        List<CartItem> cartItems = cartItemRepository.findByUser(user);
+        return cartItems.size();
+    }
 } 

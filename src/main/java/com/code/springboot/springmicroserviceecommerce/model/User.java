@@ -27,9 +27,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Username - cannot be blank
+    // First name - cannot be blank
     @Column(nullable = false)
-    private String name;
+    private String firstName;
+
+    // Last name - cannot be blank
+    @Column(nullable = false)
+    private String lastName;
 
     // Email address - cannot be blank and must be unique
     @Column(nullable = false, unique = true)

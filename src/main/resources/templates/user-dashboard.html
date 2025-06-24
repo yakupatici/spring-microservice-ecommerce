@@ -3,172 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard - E-Commerce</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>My Account - E-Commerce</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/css/style.css" rel="stylesheet">
 </head>
-<body class="bg-light">
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg custom-navbar sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="fas fa-shopping-cart me-2"></i>E-Commerce
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shopping-bag me-2"></i>E-Commerce
             </a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link text-white" href="/logout">
-                    <i class="fas fa-sign-out-alt me-1"></i>Logout
-                </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/categories">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/campaigns">Campaigns</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/favorites">
+                            <i class="fas fa-heart"></i>
+                            <span class="badge bg-danger rounded-pill" th:if="${favoritesCount > 0}" 
+                                  th:text="${favoritesCount}">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cart">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="badge bg-danger rounded-pill" th:if="${cartCount > 0}" 
+                                  th:text="${cartCount}">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" id="userDropdown" role="button" 
+                           data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" href="/dashboard">
+                                    <i class="fas fa-tachometer-alt me-2"></i>My Account
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/orders">
+                                    <i class="fas fa-box me-2"></i>My Orders
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <form th:action="@{/logout}" method="post">
+                                    <button class="dropdown-item text-danger">
+                                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <div class="container mt-5">
-        <!-- Welcome Header -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="d-flex align-items-center justify-content-between bg-white p-4 rounded shadow-sm">
-                    <div class="d-flex align-items-center">
-                        <i class="fas fa-user-circle me-3"></i>User Dashboard
-                    </div>
-                    <div class="text-muted">
-                        <i class="fas fa-clock me-1"></i>
-                        <span id="currentTime"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- User Features Grid -->
-        <div class="row g-4 mb-5">
-            <!-- Browse Products -->
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body text-center">
-                        <i class="fas fa-shopping-bag fa-3x text-primary mb-3"></i>
-                        <h5 class="card-title">Browse Products</h5>
-                        <p class="card-text">You can view and explore all products in our store.</p>
-                        <a href="#" class="btn btn-primary">
-                            <i class="fas fa-eye me-1"></i>View Products
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Favorites -->
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body text-center">
-                        <i class="fas fa-heart fa-3x text-danger mb-3"></i>
-                        <h5 class="card-title">My Favorites</h5>
-                        <p class="card-text">You can add your favorite products to favorites and review them later.</p>
-                        <a href="#" class="btn btn-danger">
-                            <i class="fas fa-heart me-1"></i>My Favorites
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Shopping Cart -->
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body text-center">
-                        <i class="fas fa-shopping-cart fa-3x text-success mb-3"></i>
-                        <h5 class="card-title">Shopping Cart</h5>
-                        <p class="card-text">You can view the products in your cart and complete the purchase.</p>
-                        <a href="#" class="btn btn-success">
-                            <i class="fas fa-shopping-cart me-1"></i>My Cart
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quick Stats -->
-        <div class="row g-4 mb-5">
-            <div class="col-md-6">
-                <div class="card bg-gradient text-white" style="background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);">
+    <div class="container py-5">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <div class="custom-card">
                     <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-grow-1">
-                                <h6 class="text-white-50 mb-1">Total Products</h6>
-                                <h3 class="mb-0" th:text="${#lists.size(products)}">0</h3>
+                        <div class="text-center mb-4">
+                            <div class="position-relative d-inline-block">
+                                <img src="https://via.placeholder.com/100" alt="Profile" 
+                                     class="rounded-circle img-thumbnail">
+                                <button class="btn btn-sm btn-primary position-absolute bottom-0 end-0 rounded-circle">
+                                    <i class="fas fa-camera"></i>
+                                </button>
                             </div>
-                            <div class="ms-3">
-                                <i class="fas fa-box fa-2x opacity-75"></i>
-                            </div>
+                            <h5 class="mt-3 mb-1" th:text="${user.firstName + ' ' + user.lastName}">User Name</h5>
+                            <p class="text-muted small mb-0" th:text="${user.email}">user@email.com</p>
+                        </div>
+                        <div class="list-group list-group-flush">
+                            <a href="/dashboard" class="list-group-item list-group-item-action active">
+                                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                            </a>
+                            <a href="/orders" class="list-group-item list-group-item-action">
+                                <i class="fas fa-box me-2"></i>My Orders
+                            </a>
+                            <a href="/favorites" class="list-group-item list-group-item-action">
+                                <i class="fas fa-heart me-2"></i>My Favorites
+                            </a>
+                            <a href="/addresses" class="list-group-item list-group-item-action">
+                                <i class="fas fa-map-marker-alt me-2"></i>My Addresses
+                            </a>
+                            <a href="/profile" class="list-group-item list-group-item-action">
+                                <i class="fas fa-user-edit me-2"></i>Profile Settings
+                            </a>
+                            <a href="/password" class="list-group-item list-group-item-action">
+                                <i class="fas fa-lock me-2"></i>Change Password
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="card bg-gradient text-white" style="background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-grow-1">
-                                <h6 class="text-white-50 mb-1">Items in Cart</h6>
-                                <h3 class="mb-0">0</h3>
+
+            <!-- Main Content Area -->
+            <div class="col-lg-9">
+                <!-- Statistics Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="custom-card bg-primary bg-gradient text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">Total Orders</h6>
+                                        <h3 class="mb-0" th:text="${totalOrders}">0</h3>
+                                    </div>
+                                    <i class="fas fa-shopping-bag fa-2x opacity-50"></i>
+                                </div>
                             </div>
-                            <div class="ms-3">
-                                <i class="fas fa-shopping-cart fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="custom-card bg-success bg-gradient text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">Total Spent</h6>
+                                        <h3 class="mb-0">$<span th:text="${totalSpent}">0.00</span></h3>
+                                    </div>
+                                    <i class="fas fa-dollar-sign fa-2x opacity-50"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="custom-card bg-info bg-gradient text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">Favorite Items</h6>
+                                        <h3 class="mb-0" th:text="${favoriteCount}">0</h3>
+                                    </div>
+                                    <i class="fas fa-heart fa-2x opacity-50"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Products Section -->
-        <div class="row mb-5">
-            <div class="col-12">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">
-                            <i class="fas fa-shopping-bag me-2"></i>Available Products
-                        </h5>
+                <!-- Recent Orders -->
+                <div class="custom-card mb-4">
+                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Recent Orders</h5>
+                        <a href="/orders" class="btn btn-sm btn-outline-primary">
+                            View All <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
                     </div>
                     <div class="card-body">
-                        <div th:if="${#lists.isEmpty(products)}">
-                            <div class="text-center py-5">
-                                <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
-                                <h5 class="text-muted">No Products Available</h5>
-                                <p class="text-muted">Check back later for new products!</p>
-                            </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Order #</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:if="${#lists.isEmpty(recentOrders)}">
+                                        <td colspan="5" class="text-center py-4">
+                                            <i class="fas fa-box fa-3x text-muted mb-3"></i>
+                                            <p class="text-muted mb-0">No orders found</p>
+                                        </td>
+                                    </tr>
+                                    <tr th:each="order : ${recentOrders}">
+                                        <td th:text="${order.orderNumber}">#12345</td>
+                                        <td th:text="${order.date}">2025-06-24</td>
+                                        <td th:text="${'$' + order.amount}">$99.99</td>
+                                        <td>
+                                            <span class="badge bg-success" th:text="${order.status}">Delivered</span>
+                                        </td>
+                                        <td>
+                                            <a th:href="@{/orders/{id}(id=${order.id})}" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div th:unless="${#lists.isEmpty(products)}">
-                            <div class="row g-4">
-                                <div class="col-md-6 col-lg-4" th:each="product : ${products}">
-                                    <div class="card h-100 border-0 shadow-sm">
-                                        <div th:if="${product.imageUrl}" class="position-relative">
-                                            <img th:src="${product.imageUrl}" class="card-img-top" alt="Product Image" style="height: 200px; object-fit: cover;">
-                                        </div>
-                                        <div th:unless="${product.imageUrl}" class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-                                            <i class="fas fa-image fa-3x text-muted"></i>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="d-flex align-items-start justify-content-between mb-3">
-                                                <h6 class="card-title mb-0 text-primary" th:text="${product.name}">Product Name</h6>
-                                                <span class="badge bg-success fs-6" th:text="'$' + ${product.price}">$0.00</span>
-                                            </div>
-                                            <p class="card-text text-muted small" th:text="${product.description}">Product description...</p>
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <small class="text-muted">
-                                                    <i class="fas fa-cubes me-1"></i>
-                                                    Stock: <span th:text="${product.stockQuantity}">0</span>
-                                                </small>
-                                                <div class="btn-group" role="group">
-                                                    <button type="button" class="btn btn-outline-primary btn-sm">
-                                                        <i class="fas fa-heart"></i>
-                                                    </button>
-                                                    <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post" style="display: inline;">
-                                                        <input type="hidden" name="quantity" value="1">
-                                                        <button type="submit" class="btn btn-primary btn-sm" 
-                                                                th:disabled="${product.stockQuantity == 0}">
-                                                            <i class="fas fa-shopping-cart me-1"></i>Add to Cart
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </div>
+                    </div>
+                </div>
+
+                <!-- Recent Favorites -->
+                <div class="custom-card">
+                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Recent Favorites</h5>
+                        <a href="/favorites" class="btn btn-sm btn-outline-primary">
+                            View All <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-4">
+                            <div th:if="${#lists.isEmpty(recentFavorites)}" class="col-12 text-center py-4">
+                                <i class="fas fa-heart fa-3x text-muted mb-3"></i>
+                                <p class="text-muted mb-0">No favorite items found</p>
+                                <a href="/products" class="btn btn-primary mt-3">
+                                    <i class="fas fa-store me-2"></i>Browse Products
+                                </a>
+                            </div>
+                            <div th:each="product : ${recentFavorites}" class="col-md-4">
+                                <div class="card h-100">
+                                    <img th:src="${product.imageUrl}" class="card-img-top" alt="Product Image">
+                                    <div class="card-body">
+                                        <h6 class="card-title" th:text="${product.name}">Product Name</h6>
+                                        <p class="card-text text-primary fw-bold" th:text="${'$' + product.price}">$99.99</p>
+                                        <div class="d-flex justify-content-between">
+                                            <button class="btn btn-sm btn-primary">
+                                                <i class="fas fa-shopping-cart me-1"></i>Add to Cart
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger">
+                                                <i class="fas fa-heart"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -178,133 +258,83 @@
                 </div>
             </div>
         </div>
-
-        <!-- Success/Error Messages -->
-        <div class="row mb-4" th:if="${success != null || error != null}">
-            <div class="col-12">
-                <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>
-                    <span th:text="${success}">Success message</span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-circle me-2"></i>
-                    <span th:text="${error}">Error message</span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Cart Items Section -->
-        <div class="row mb-5">
-            <div class="col-12">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-success text-white">
-                        <h5 class="mb-0">
-                            <i class="fas fa-shopping-cart me-2"></i>Shopping Cart
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div th:if="${#lists.isEmpty(cartItems)}">
-                            <div class="text-center py-5">
-                                <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
-                                <h5 class="text-muted">Your cart is empty</h5>
-                                <p class="text-muted">Add some products to your cart!</p>
-                            </div>
-                        </div>
-                        <div th:unless="${#lists.isEmpty(cartItems)}">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Product</th>
-                                            <th>Price</th>
-                                            <th>Quantity</th>
-                                            <th>Total</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:each="item : ${cartItems}">
-                                            <td th:text="${item.product.name}">Product Name</td>
-                                            <td th:text="'$' + ${item.product.price}">$0.00</td>
-                                            <td>
-                                                <form th:action="@{/cart/update/{id}(id=${item.product.id})}" 
-                                                      method="post" class="d-flex align-items-center">
-                                                    <input type="number" name="quantity" 
-                                                           th:value="${item.quantity}" 
-                                                           min="1" 
-                                                           th:max="${item.product.stockQuantity}"
-                                                           class="form-control form-control-sm" 
-                                                           style="width: 70px;">
-                                                    <button type="submit" class="btn btn-sm btn-outline-primary ms-2">
-                                                        <i class="fas fa-sync-alt"></i>
-                                                    </button>
-                                                </form>
-                                            </td>
-                                            <td th:text="'$' + ${item.quantity * item.product.price}">$0.00</td>
-                                            <td>
-                                                <form th:action="@{/cart/remove/{id}(id=${item.product.id})}" 
-                                                      method="post" style="display: inline;">
-                                                    <button type="submit" class="btn btn-sm btn-danger">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="3" class="text-end"><strong>Total:</strong></td>
-                                            <td colspan="2">
-                                                <strong th:text="'$' + ${#aggregates.sum(cartItems.![quantity * product.price])}">
-                                                    $0.00
-                                                </strong>
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                            <div class="text-end mt-3">
-                                <button class="btn btn-success">
-                                    <i class="fas fa-shopping-cart me-2"></i>Proceed to Checkout
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- User Info Alert -->
-        <div class="row">
-            <div class="col-12">
-                <div class="alert alert-info" role="alert">
-                    <i class="fas fa-info-circle me-2"></i>
-                    <strong>Information:</strong> This user dashboard is specially designed for you.
-                    You do not have admin privileges. For product management and other admin functions,
-                    you need to log in with an admin account.
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white text-center py-4 mt-5">
+    <footer class="footer mt-5">
         <div class="container">
-            <p class="mb-0">&copy; 2025 E-Commerce Platform. All rights reserved.</p>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <h5 class="footer-title">E-Commerce</h5>
+                    <p class="text-muted">
+                        Your new generation shopping experience
+                    </p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-muted">
+                            <i class="fab fa-facebook fa-lg"></i>
+                        </a>
+                        <a href="#" class="text-muted">
+                            <i class="fab fa-twitter fa-lg"></i>
+                        </a>
+                        <a href="#" class="text-muted">
+                            <i class="fab fa-instagram fa-lg"></i>
+                        </a>
+                        <a href="#" class="text-muted">
+                            <i class="fab fa-youtube fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="footer-title">Company</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="footer-link">About Us</a></li>
+                        <li><a href="#" class="footer-link">Careers</a></li>
+                        <li><a href="#" class="footer-link">Contact</a></li>
+                        <li><a href="#" class="footer-link">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="footer-title">Customer Service</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="footer-link">FAQ</a></li>
+                        <li><a href="#" class="footer-link">Shipping Info</a></li>
+                        <li><a href="#" class="footer-link">Returns & Exchange</a></li>
+                        <li><a href="#" class="footer-link">Help Center</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="footer-title">Contact</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            New York, USA
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-phone me-2"></i>
+                            +1 234 5678 900
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-envelope me-2"></i>
+                            contact@example.com
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2025 E-Commerce. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-muted me-3">Privacy Policy</a>
+                    <a href="#" class="text-muted me-3">Terms of Service</a>
+                    <a href="#" class="text-muted">Cookie Policy</a>
+                </div>
+            </div>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Update current time
-        function updateTime() {
-            const now = new Date();
-            document.getElementById('currentTime').textContent = now.toLocaleTimeString();
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
-    </script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html> 
