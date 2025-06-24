@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sepetim - E-Commerce</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #000DFF !important;
+        }
+        .nav-link {
+            color: #333 !important;
+            font-weight: 500;
+        }
+        .nav-link:hover {
+            color: #000DFF !important;
+        }
+        .cart-item {
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+        .cart-item:hover {
+            transform: translateY(-5px);
+        }
+        .cart-item img {
+            border-radius: 10px;
+            object-fit: cover;
+            height: 100px;
+            width: 100px;
+        }
+        .quantity-control {
+            width: 120px;
+        }
+        .btn-primary {
+            background: #000DFF;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 25px;
+        }
+        .btn-primary:hover {
+            background: #0000CC;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 50px 0;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shopping-bag me-2"></i>E-Commerce
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products">
+                            <i class="fas fa-store me-1"></i>Ürünler
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/cart">
+                            <i class="fas fa-shopping-cart me-1"></i>Sepet
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/favorites">
+                            <i class="fas fa-heart me-1"></i>Favoriler
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fas fa-user me-1"></i>Hesabım
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container" style="margin-top: 100px;">
+        <!-- Messages -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4 class="mb-4">
+                            <i class="fas fa-shopping-cart me-2"></i>Sepetim
+                        </h4>
+                        
+                        <div th:if="${#lists.isEmpty(cartItems)}" class="text-center py-5">
+                            <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">Sepetiniz Boş</h5>
+                            <p class="text-muted mb-4">Hemen alışverişe başlayın!</p>
+                            <a href="/products" class="btn btn-primary">
+                                <i class="fas fa-store me-2"></i>Ürünleri Görüntüle
+                            </a>
+                        </div>
+                        
+                        <div th:unless="${#lists.isEmpty(cartItems)}" class="cart-items">
+                            <div th:each="item : ${cartItems}" class="cart-item card mb-3 shadow-sm">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-2">
+                                            <img th:src="${item.product.imageUrl != null ? item.product.imageUrl : 'https://via.placeholder.com/100'}"
+                                                 class="img-fluid" alt="Product Image">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h5 class="card-title" th:text="${item.product.name}">Ürün Adı</h5>
+                                            <p class="card-text text-muted" th:text="${item.product.description}">Açıklama</p>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <span class="text-primary fw-bold" th:text="${'₺' + item.product.price}">₺0.00</span>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <form th:action="@{/cart/update/{id}(id=${item.product.id})}" method="post" class="d-flex align-items-center">
+                                                <div class="input-group quantity-control">
+                                                    <button class="btn btn-outline-secondary" type="button" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                                                        <i class="fas fa-minus"></i>
+                                                    </button>
+                                                    <input type="number" class="form-control text-center" name="quantity"
+                                                           th:value="${item.quantity}" min="1" max="10">
+                                                    <button class="btn btn-outline-secondary" type="button" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-md-2 text-end">
+                                            <form th:action="@{/cart/remove/{id}(id=${item.product.id})}" method="post">
+                                                <button type="submit" class="btn btn-outline-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Sipariş Özeti</h5>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Ara Toplam</span>
+                            <span th:text="${'₺' + #aggregates.sum(cartItems.![product.price * quantity])}">₺0.00</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Kargo</span>
+                            <span class="text-success">Ücretsiz</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-4">
+                            <strong>Toplam</strong>
+                            <strong class="text-primary" th:text="${'₺' + #aggregates.sum(cartItems.![product.price * quantity])}">₺0.00</strong>
+                        </div>
+                        <button class="btn btn-primary w-100">
+                            <i class="fas fa-credit-card me-2"></i>Ödemeye Geç
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Hakkımızda</h5>
+                    <p class="text-muted">En kaliteli ürünleri en uygun fiyatlarla sizlere sunuyoruz.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Hızlı Linkler</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/products" class="text-muted">Ürünler</a></li>
+                        <li><a href="/cart" class="text-muted">Sepetim</a></li>
+                        <li><a href="/favorites" class="text-muted">Favorilerim</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>İletişim</h5>
+                    <ul class="list-unstyled text-muted">
+                        <li><i class="fas fa-phone me-2"></i>+90 555 555 5555</li>
+                        <li><i class="fas fa-envelope me-2"></i>info@ecommerce.com</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i>İstanbul, Türkiye</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center text-muted">
+                <small>&copy; 2024 E-Commerce. Tüm hakları saklıdır.</small>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
